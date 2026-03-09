@@ -2,46 +2,60 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEGACY_OS // V5_STABLE</title>
-    <script src="https://cdn.jsdelivr.net/npm/js-dos@7.0.0/build/bundle/js-dos.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/js-dos@7.0.0/build/bundle/js-dos.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>LEGACY_OS // IRONCLAD_V6</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-dos/7.0.0/js-dos.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/js-dos/7.0.0/js-dos.css" rel="stylesheet">
     <style>
-        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-        #status { padding: 10px; font-size: 14px; border-bottom: 1px solid #00ff41; text-align: center; background: #050505; color: #00ff41; font-weight: bold; }
-        #dos-container { flex-grow: 1; width: 100vw; background: #000; position: relative; }
-        .controls { padding: 30px 20px 50px 20px; /* הוספת רווח תחתון גדול למניעת חיתוך */ background: #000; border-top: 2px solid #00ff41; display: flex; justify-content: center; z-index: 100; }
-        #btn-start { background: #00ff41; color: #000; border: none; padding: 15px 40px; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 1.2rem; box-shadow: 0 0 15px rgba(0,255,65,0.4); }
-        #btn-start:active { transform: scale(0.95); background: #00cc33; }
+        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; }
+        #status { padding: 10px; font-size: 14px; border-bottom: 2px solid #00ff41; text-align: center; background: #0a0a0a; }
+        #dos-container { flex-grow: 1; width: 100vw; background: #000; }
+        .controls { 
+            padding-bottom: env(safe-area-inset-bottom); /* הגנה מפני הפס של האייפון/אנדרואיד */
+            background: #000; 
+            border-top: 1px solid #333; 
+            display: flex; 
+            justify-content: center; 
+            padding-top: 20px;
+            padding-bottom: 40px;
+        }
+        #btn-start { 
+            background: #00ff41; 
+            color: #000; 
+            border: none; 
+            padding: 15px 50px; 
+            font-weight: bold; 
+            font-size: 1.2rem; 
+            border-radius: 50px; 
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
+        }
     </style>
 </head>
 <body>
 
-    <div id="status">LEGACY_OS // READY_TO_LOAD</div>
+    <div id="status">LEGACY_OS // STANDALONE_MODE</div>
     <div id="dos-container"></div>
 
     <div class="controls">
-        <button id="btn-start" onclick="runGame()">RUN_BUBBLE_BOBBLE</button>
+        <button id="btn-start" onclick="launch()">EXECUTE: BUBBLE_BOBBLE</button>
     </div>
 
     <script>
-        function runGame() {
+        function launch() {
             const container = document.getElementById("dos-container");
             const status = document.getElementById("status");
             document.querySelector(".controls").style.display = "none";
-            status.innerText = "BOOTING_SYSTEM... PLEASE_WAIT";
+            status.innerText = "LOCAL_BOOT_IN_PROGRESS...";
 
-            // ניסיון טעינה עם הגדרות תאימות גבוהות
+            // טעינה מהקובץ המקומי שהעלית ל-GitHub
             Dos(container, {
-                wdboxUrl: "https://cdn.jsdelivr.net/npm/js-dos@7.0.0/build/bundle/wdbox.js",
                 cycles: "auto",
                 autolock: false
-            }).run("https://v7.js-dos.com/build/test/bubble.jsdos").then((runtime) => {
-                status.innerText = "SYSTEM_ONLINE // BUBBLE_BOBBLE";
+            }).run("bubble.jsdos").then((runtime) => {
+                status.innerText = "SYSTEM_RUNNING // LOCAL_SOURCE";
             }).catch((err) => {
-                status.innerText = "BOOT_FAILED: CHECK_CONNECTION";
+                status.innerText = "FATAL_ERROR: MISSING_FILE_IN_GITHUB";
                 console.error(err);
-                document.querySelector(".controls").style.display = "flex";
             });
         }
     </script>
