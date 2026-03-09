@@ -2,60 +2,57 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>LEGACY_OS // IRONCLAD_V6</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-dos/7.0.0/js-dos.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/js-dos/7.0.0/js-dos.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LEGACY_OS // V7_STABLE</title>
+    <script src="https://js-dos.com/6.22/current/js-dos.js"></script>
     <style>
-        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; }
+        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         #status { padding: 10px; font-size: 14px; border-bottom: 2px solid #00ff41; text-align: center; background: #0a0a0a; }
         #dos-container { flex-grow: 1; width: 100vw; background: #000; }
         .controls { 
-            padding-bottom: env(safe-area-inset-bottom); /* הגנה מפני הפס של האייפון/אנדרואיד */
+            padding: 20px 20px 60px 20px; /* רווח גדול מאוד למטה למניעת חיתוך */
             background: #000; 
             border-top: 1px solid #333; 
             display: flex; 
-            justify-content: center; 
-            padding-top: 20px;
-            padding-bottom: 40px;
+            justify-content: center;
         }
         #btn-start { 
             background: #00ff41; 
             color: #000; 
             border: none; 
-            padding: 15px 50px; 
+            padding: 15px 40px; 
             font-weight: bold; 
             font-size: 1.2rem; 
-            border-radius: 50px; 
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
         }
     </style>
 </head>
 <body>
 
-    <div id="status">LEGACY_OS // STANDALONE_MODE</div>
+    <div id="status">LEGACY_OS // V7_READY</div>
     <div id="dos-container"></div>
 
     <div class="controls">
-        <button id="btn-start" onclick="launch()">EXECUTE: BUBBLE_BOBBLE</button>
+        <button id="btn-start" onclick="startLegacy()">LAUNCH_BUBBLE_BOBBLE</button>
     </div>
 
     <script>
-        function launch() {
-            const container = document.getElementById("dos-container");
+        function startLegacy() {
             const status = document.getElementById("status");
-            document.querySelector(".controls").style.display = "none";
-            status.innerText = "LOCAL_BOOT_IN_PROGRESS...";
+            const btn = document.getElementById("btn-start");
+            btn.style.display = "none";
+            status.innerText = "CONNECTING_TO_ARCHIVE...";
 
-            // טעינה מהקובץ המקומי שהעלית ל-GitHub
-            Dos(container, {
-                cycles: "auto",
-                autolock: false
-            }).run("bubble.jsdos").then((runtime) => {
-                status.innerText = "SYSTEM_RUNNING // LOCAL_SOURCE";
-            }).catch((err) => {
-                status.innerText = "FATAL_ERROR: MISSING_FILE_IN_GITHUB";
-                console.error(err);
+            // שימוש בגרסה 6 עם טעינת ZIP ישירה
+            Dos(document.getElementById("dos-container"), {
+                wdboxUrl: "https://js-dos.com/6.22/current/wdbox.js"
+            }).ready(function (fs, main) {
+                status.innerText = "EXTRACTING_GAME_FILES...";
+                fs.extract("https://js-dos.com/6.22/current/test/bubble.zip").then(function () {
+                    status.innerText = "SYSTEM_RUNNING: BUBBLE_BOBBLE";
+                    main(["-c", "bubble.exe"]); // פקודת ההרצה של המשחק
+                });
             });
         }
     </script>
