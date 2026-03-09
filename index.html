@@ -2,56 +2,54 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEGACY_OS // V7_STABLE</title>
-    <script src="https://js-dos.com/6.22/current/js-dos.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>LEGACY_OS // TURBO_V8</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-dos/6.22.20/js-dos.js"></script>
     <style>
         body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-        #status { padding: 10px; font-size: 14px; border-bottom: 2px solid #00ff41; text-align: center; background: #0a0a0a; }
-        #dos-container { flex-grow: 1; width: 100vw; background: #000; }
+        #status { padding: 10px; font-size: 14px; border-bottom: 2px solid #00ff41; text-align: center; background: #0a0a0a; z-index: 10; }
+        #dos-container { flex-grow: 1; width: 100vw; background: #000; position: relative; }
+        /* הגדרה למסך מלא של האמולטור */
+        canvas { width: 100% !important; height: 100% !important; object-fit: contain; }
         .controls { 
-            padding: 20px 20px 60px 20px; /* רווח גדול מאוד למטה למניעת חיתוך */
+            padding-bottom: env(safe-area-inset-bottom);
             background: #000; 
-            border-top: 1px solid #333; 
             display: flex; 
             justify-content: center;
+            padding-top: 20px;
+            padding-bottom: 60px;
         }
         #btn-start { 
-            background: #00ff41; 
-            color: #000; 
-            border: none; 
-            padding: 15px 40px; 
-            font-weight: bold; 
-            font-size: 1.2rem; 
-            border-radius: 5px;
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+            background: #00ff41; color: #000; border: none; padding: 15px 50px; 
+            font-weight: bold; font-size: 1.2rem; border-radius: 50px; 
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.6); cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <div id="status">LEGACY_OS // V7_READY</div>
+    <div id="status">LEGACY_OS // SYSTEM_READY</div>
     <div id="dos-container"></div>
 
-    <div class="controls">
-        <button id="btn-start" onclick="startLegacy()">LAUNCH_BUBBLE_BOBBLE</button>
+    <div class="controls" id="ctrl-panel">
+        <button id="btn-start" onclick="startTurbo()">LAUNCH_BUBBLE_BOBBLE</button>
     </div>
 
     <script>
-        function startLegacy() {
+        function startTurbo() {
             const status = document.getElementById("status");
-            const btn = document.getElementById("btn-start");
-            btn.style.display = "none";
-            status.innerText = "CONNECTING_TO_ARCHIVE...";
+            document.getElementById("ctrl-panel").style.display = "none";
+            status.innerText = "INITIALIZING_HIGH_SPEED_BOOT...";
 
-            // שימוש בגרסה 6 עם טעינת ZIP ישירה
+            // שימוש בשרתים המהירים של Cloudflare עבור ה-Wdbox
             Dos(document.getElementById("dos-container"), {
-                wdboxUrl: "https://js-dos.com/6.22/current/wdbox.js"
+                wdboxUrl: "https://cdnjs.cloudflare.com/ajax/libs/js-dos/6.22.20/wdbox.js"
             }).ready(function (fs, main) {
-                status.innerText = "EXTRACTING_GAME_FILES...";
+                status.innerText = "LOADING_GAME_DATA...";
+                // טעינת המשחק מהארכיון
                 fs.extract("https://js-dos.com/6.22/current/test/bubble.zip").then(function () {
                     status.innerText = "SYSTEM_RUNNING: BUBBLE_BOBBLE";
-                    main(["-c", "bubble.exe"]); // פקודת ההרצה של המשחק
+                    main(["-c", "bubble.exe"]);
                 });
             });
         }
