@@ -3,55 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEGACY_OS // STABLE_V3</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/js-dos@7.0.0/build/bundle/js-dos.css">
-    <script src="https://cdn.jsdelivr.net/npm/js-dos@7.0.0/build/bundle/js-dos.js"></script>
+    <title>LEGACY_OS // LOCAL_CORE</title>
+    <link rel="stylesheet" href="js-dos.css">
+    <script src="js-dos.js"></script>
     <style>
         body { background: #000; color: #00ff41; font-family: monospace; margin: 0; padding: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-        #status { padding: 15px; font-size: 14px; background: #111; border-bottom: 2px solid #00ff41; text-align: center; min-height: 20px; }
-        #dos-container { flex-grow: 1; width: 100vw; background: #000; position: relative; }
-        .controls { padding: 25px; background: #000; border-top: 2px solid #00ff41; display: flex; justify-content: center; z-index: 100; }
-        #btn-start { background: #00ff41; color: #000; border: none; padding: 18px 50px; font-weight: bold; cursor: pointer; font-size: 1.2rem; box-shadow: 0 0 15px #00ff41; }
+        #status { padding: 15px; font-size: 14px; background: #111; border-bottom: 2px solid #00ff41; text-align: center; }
+        #dos-container { flex-grow: 1; width: 100vw; background: #000; }
+        .controls { padding: 25px; background: #000; border-top: 2px solid #00ff41; display: flex; justify-content: center; }
+        #btn-start { background: #00ff41; color: #000; border: none; padding: 18px 50px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div id="status">INIT_SEQUENCE: READY</div>
+    <div id="status">LOCAL_INIT: READY</div>
     <div id="dos-container"></div>
 
     <div class="controls">
-        <button id="btn-start">START_GAME</button>
+        <button id="btn-start">EXECUTE_LEGACY_OS</button>
     </div>
 
     <script>
         const container = document.getElementById("dos-container");
         const btnStart = document.getElementById("btn-start");
-        const statusBox = document.getElementById("status");
 
         btnStart.onclick = async () => {
-            statusBox.innerText = "BOOTING_CORE...";
-            btnStart.disabled = true;
-            btnStart.style.opacity = "0.5";
+            document.getElementById("status").innerText = "LOADING_LOCAL_CORE...";
+            btnStart.style.display = "none";
 
             try {
-                // בדיקה אם הספרייה נטענה
-                if (typeof Dos === "undefined") {
-                    throw new Error("JS-DOS_LIBRARY_NOT_LOADED");
-                }
-
+                // הפניה לקובץ wdbox המקומי שלך
                 const runtime = await Dos(container, {
-                    url: "https://cdn.jsdelivr.net/npm/js-dos@7.0.0/build/bundle/wdbox.js"
-                }).run("https://js-dos.com/v7/build/test/digger.jsdos");
+                    url: "wdbox.js"
+                }).run("bubble.zip"); // כאן הוא יטען את הקובץ שהעלית
 
-                statusBox.innerText = "RUNNING: DIGGER.EXE";
-                btnStart.parentElement.style.display = "none";
-                
+                document.getElementById("status").innerText = "SYSTEM_RUNNING: BUBBLE_BOBBLE";
             } catch (err) {
-                statusBox.style.color = "red";
-                statusBox.innerText = "FATAL_ERROR: " + err.message;
-                console.error(err);
-                btnStart.disabled = false;
-                btnStart.style.opacity = "1";
+                document.getElementById("status").innerText = "CORE_ERROR: " + err.message;
             }
         };
     </script>
