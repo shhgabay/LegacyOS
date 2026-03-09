@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEGACY_OS // CLOUD_BOOT</title>
-    <script src="https://bundle.js-dos.com/v7/build/bundle/js-dos.js"></script>
-    <link href="https://bundle.js-dos.com/v7/build/bundle/js-dos.css" rel="stylesheet">
+    <title>LEGACY_OS // V5_STABLE</title>
+    <script src="https://cdn.jsdelivr.net/npm/js-dos@7.0.0/build/bundle/js-dos.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/js-dos@7.0.0/build/bundle/js-dos.css" rel="stylesheet">
     <style>
         body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-        #status { padding: 10px; font-size: 12px; border-bottom: 1px solid #00ff41; text-align: center; background: #050505; }
-        #dos-container { flex-grow: 1; width: 100vw; background: #000; }
-        .controls { padding: 20px; background: #000; border-top: 1px solid #00ff41; display: flex; justify-content: center; }
-        #btn-start { background: #00ff41; color: #000; border: none; padding: 15px 40px; font-weight: bold; cursor: pointer; border-radius: 4px; box-shadow: 0 0 10px #00ff41; }
+        #status { padding: 10px; font-size: 14px; border-bottom: 1px solid #00ff41; text-align: center; background: #050505; color: #00ff41; font-weight: bold; }
+        #dos-container { flex-grow: 1; width: 100vw; background: #000; position: relative; }
+        .controls { padding: 30px 20px 50px 20px; /* הוספת רווח תחתון גדול למניעת חיתוך */ background: #000; border-top: 2px solid #00ff41; display: flex; justify-content: center; z-index: 100; }
+        #btn-start { background: #00ff41; color: #000; border: none; padding: 15px 40px; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 1.2rem; box-shadow: 0 0 15px rgba(0,255,65,0.4); }
+        #btn-start:active { transform: scale(0.95); background: #00cc33; }
     </style>
 </head>
 <body>
 
-    <div id="status">LEGACY_OS v1.0 // READY_FOR_BOOT</div>
+    <div id="status">LEGACY_OS // READY_TO_LOAD</div>
     <div id="dos-container"></div>
 
     <div class="controls">
@@ -26,14 +27,21 @@
     <script>
         function runGame() {
             const container = document.getElementById("dos-container");
-            document.getElementById("btn-start").style.display = "none";
-            document.getElementById("status").innerText = "BOOTING: BUBBLE_BOBBLE...";
+            const status = document.getElementById("status");
+            document.querySelector(".controls").style.display = "none";
+            status.innerText = "BOOTING_SYSTEM... PLEASE_WAIT";
 
-            // הפעלה ישירה של המשחק משרת הארכיון העולמי
-            Dos(container).run("https://js-dos.com/v7/build/test/bubble.jsdos").then((runtime) => {
-                document.getElementById("status").innerText = "SYSTEM_RUNNING: OK";
+            // ניסיון טעינה עם הגדרות תאימות גבוהות
+            Dos(container, {
+                wdboxUrl: "https://cdn.jsdelivr.net/npm/js-dos@7.0.0/build/bundle/wdbox.js",
+                cycles: "auto",
+                autolock: false
+            }).run("https://v7.js-dos.com/build/test/bubble.jsdos").then((runtime) => {
+                status.innerText = "SYSTEM_ONLINE // BUBBLE_BOBBLE";
             }).catch((err) => {
-                document.getElementById("status").innerText = "BOOT_ERROR: " + err;
+                status.innerText = "BOOT_FAILED: CHECK_CONNECTION";
+                console.error(err);
+                document.querySelector(".controls").style.display = "flex";
             });
         }
     </script>
