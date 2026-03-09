@@ -3,45 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEGACY_OS // LOCAL_CORE</title>
-    <link rel="stylesheet" href="js-dos.css">
-    <script src="js-dos.js"></script>
+    <title>LEGACY_OS // CLOUD_BOOT</title>
+    <script src="https://bundle.js-dos.com/v7/build/bundle/js-dos.js"></script>
+    <link href="https://bundle.js-dos.com/v7/build/bundle/js-dos.css" rel="stylesheet">
     <style>
-        body { background: #000; color: #00ff41; font-family: monospace; margin: 0; padding: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-        #status { padding: 15px; font-size: 14px; background: #111; border-bottom: 2px solid #00ff41; text-align: center; }
+        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        #status { padding: 10px; font-size: 12px; border-bottom: 1px solid #00ff41; text-align: center; background: #050505; }
         #dos-container { flex-grow: 1; width: 100vw; background: #000; }
-        .controls { padding: 25px; background: #000; border-top: 2px solid #00ff41; display: flex; justify-content: center; }
-        #btn-start { background: #00ff41; color: #000; border: none; padding: 18px 50px; font-weight: bold; cursor: pointer; }
+        .controls { padding: 20px; background: #000; border-top: 1px solid #00ff41; display: flex; justify-content: center; }
+        #btn-start { background: #00ff41; color: #000; border: none; padding: 15px 40px; font-weight: bold; cursor: pointer; border-radius: 4px; box-shadow: 0 0 10px #00ff41; }
     </style>
 </head>
 <body>
 
-    <div id="status">LOCAL_INIT: READY</div>
+    <div id="status">LEGACY_OS v1.0 // READY_FOR_BOOT</div>
     <div id="dos-container"></div>
 
     <div class="controls">
-        <button id="btn-start">EXECUTE_LEGACY_OS</button>
+        <button id="btn-start" onclick="runGame()">RUN_BUBBLE_BOBBLE</button>
     </div>
 
     <script>
-        const container = document.getElementById("dos-container");
-        const btnStart = document.getElementById("btn-start");
+        function runGame() {
+            const container = document.getElementById("dos-container");
+            document.getElementById("btn-start").style.display = "none";
+            document.getElementById("status").innerText = "BOOTING: BUBBLE_BOBBLE...";
 
-        btnStart.onclick = async () => {
-            document.getElementById("status").innerText = "LOADING_LOCAL_CORE...";
-            btnStart.style.display = "none";
-
-            try {
-                // הפניה לקובץ wdbox המקומי שלך
-                const runtime = await Dos(container, {
-                    url: "wdbox.js"
-                }).run("bubble.zip"); // כאן הוא יטען את הקובץ שהעלית
-
-                document.getElementById("status").innerText = "SYSTEM_RUNNING: BUBBLE_BOBBLE";
-            } catch (err) {
-                document.getElementById("status").innerText = "CORE_ERROR: " + err.message;
-            }
-        };
+            // הפעלה ישירה של המשחק משרת הארכיון העולמי
+            Dos(container).run("https://js-dos.com/v7/build/test/bubble.jsdos").then((runtime) => {
+                document.getElementById("status").innerText = "SYSTEM_RUNNING: OK";
+            }).catch((err) => {
+                document.getElementById("status").innerText = "BOOT_ERROR: " + err;
+            });
+        }
     </script>
 </body>
 </html>
