@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEGACY_OS // BOOT_SEQUENCE</title>
+    <title>LEGACY_OS // BOOT_V2</title>
     <link rel="stylesheet" href="https://js-dos.com/v7/build/bundle/js-dos.css">
     <script src="https://js-dos.com/v7/build/bundle/js-dos.js"></script>
     <style>
-        body { background: #000; color: #00ff41; font-family: monospace; margin: 0; overflow: hidden; height: 100vh; }
-        #dos-container { width: 100vw; height: 80vh; background: #111; }
-        .controls { height: 20vh; display: flex; justify-content: center; align-items: center; gap: 20px; background: #000; border-top: 2px solid #333; }
-        button { background: #222; color: #00ff41; border: 1px solid #00ff41; padding: 15px 30px; font-weight: bold; }
-        #status { position: fixed; top: 10px; left: 10px; font-size: 10px; z-index: 10; }
+        body { background: #000; color: #00ff41; font-family: monospace; margin: 0; padding: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        #status { padding: 10px; font-size: 12px; background: #111; border-bottom: 1px solid #333; }
+        
+        /* תיקון הגובה כדי שהכפתור לא ייחתך */
+        #dos-container { flex-grow: 1; width: 100vw; background: #000; position: relative; }
+        
+        .controls { padding: 20px; background: #000; border-top: 2px solid #00ff41; display: flex; justify-content: center; z-index: 100; }
+        #btn-start { background: #00ff41; color: #000; border: none; padding: 15px 40px; font-weight: bold; cursor: pointer; font-size: 1.1rem; border-radius: 5px; }
     </style>
 </head>
 <body>
 
     <div id="status">SYS_STATUS: READY // WAITING_FOR_DISK</div>
-    
     <div id="dos-container"></div>
 
     <div class="controls">
@@ -29,16 +31,19 @@
         const btnStart = document.getElementById("btn-start");
 
         btnStart.onclick = () => {
-            document.getElementById('status').innerText = "SYS_STATUS: LOADING_ROM...";
+            document.getElementById('status').innerText = "SYS_STATUS: LOADING_ENGINE...";
             
-            // טעינת האמולטור
-            Dos(container).run("https://js-dos.com/v7/build/test/digger.jsdos").then((runtime) => {
-                document.getElementById('status').innerText = "SYS_STATUS: RUNNING";
-                
-                // כאן נוסיף בעתיד את הג'ויסטיק הוירטואלי
+            // שימוש בגרסה יציבה יותר וקישור ישיר
+            Dos(container, {
+                wdboxUrl: "https://js-dos.com/v7/build/bundle/wdbox.js",
+                cycles: 1000,
+                autolock: false
+            }).run("https://js-dos.com/v7/build/test/digger.jsdos").then((runtime) => {
+                document.getElementById('status').innerText = "SYS_STATUS: RUNNING_DIGGER";
+                btnStart.parentElement.style.display = "none"; // מחביא את כל אזור הכפתור אחרי הטעינה
+            }).catch((err) => {
+                document.getElementById('status').innerText = "FATAL_ERROR: " + err;
             });
-            
-            btnStart.style.display = "none";
         };
     </script>
 </body>
